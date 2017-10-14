@@ -1,5 +1,5 @@
 #!/bin/bash
-#quick detect host from list with the best response
+#fast-detect host from list (sizeof any) with the best response
 #example: best=$(./top_ping); echo $best
 
 rm -rf /tmp/*.-ping
@@ -12,7 +12,8 @@ fi
 
 for h in aquarius-{va,bg,den,dae} {amazon,yahoo,softwareag,ebay,googleQWERT,youtube}.com {pscu,gnu}.org localhost
 do
-   ping -$($cw && echo n || echo c) 4 -w 3 $h > /tmp/$h.-ping 2>&1& #&collect fast!
+   while true; do test $(jobs|wc -l) -gt 100 && sleep 1 || break; done #throttle
+   ping -$($cw && echo n || echo c) 4 -w 3 $h > /tmp/$h.-ping 2>&1&    #parallel
 done; wait
 
 #when in doubt, use brute force ~ken
