@@ -1,0 +1,15 @@
+#!/bin/bash
+
+#quick detect host with best response
+rm -rf /tmp/*.-ping
+
+for h in {amazon,yahoo,softwareag,ebay,google,youtube.com}.com {pscu,gnu}.org
+do
+   ping -c 3 -w 3 $h > /tmp/$h.-ping 2>/tmp/duh.-ping& #&find fast!
+done; wait
+
+#unix brute force in action when in doubt
+grep "time=[^ ]\+" /tmp/*.-ping -o|sort -t '=' -k2n |head -1|sed 's~/tmp/\(.*\)\.-ping.*~\1~'
+
+test -s /tmp/duh.-ping && { echo 'warn $0: some host(s) do not response' 1>&2; } ||:
+
