@@ -1,0 +1,16 @@
+thread () 
+{ 
+    local i;
+    date;
+    while ((++i)); do
+        sleep $((5-$(date +%s)%5));
+        echo "$BASHPID $i $(date)";
+    done
+}
+jkill () 
+{ 
+    i=1;
+    while kill %$((i++)); do
+        :;
+    done
+}
